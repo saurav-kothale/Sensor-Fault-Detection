@@ -1,12 +1,12 @@
 from sensor.configuration.mongodb_configuration import MongoDBClient
 from sensor.entity.config_entity import TrainingPipelineConfig, DataIngestionConfig
+# from sensor.pipeline import training_pipeline
+from sensor.pipeline.training_pipeline import TrainingPipeline
 
 if __name__ == "__main__":
 
-    training_pipeline_config = TrainingPipelineConfig()
+    training_pipeline = TrainingPipeline()
+    training_pipeline.run_pipeline()
 
-    data_ingestion_cofig = DataIngestionConfig(training_pipeline_config)
-
-    print(data_ingestion_cofig.__dict__)
     
     
