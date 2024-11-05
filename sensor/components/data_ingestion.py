@@ -8,6 +8,8 @@ from sensor.data_access.sensor_data import SensorData
 from sensor.constant.database import DATABASE_NAME, COLLECTION_NAME
 from sensor.constant.training_pipeline import DATA_INGESTION_TRAIN_TEST_SPLIT_RATION
 from sklearn.model_selection import train_test_split
+from sensor.utils.main_utils import read_yaml_file
+from sensor.constant.training_pipeline import SCHEMA_FILE_PATH
 
 
 class DataIngestion:
@@ -16,6 +18,7 @@ class DataIngestion:
 
         try:
             self.data_ingestion_config = data_ingestion_config
+            self._schema_config = read_yaml_file(SCHEMA_FILE_PATH)
         except Exception as e:
             raise SensorException(e, sys)
         
@@ -82,6 +85,7 @@ class DataIngestion:
     def initiate_data_ingestions(self) -> DataIngestionArtifact:
         try:
             dataframe = self.export_data_into_feature_store()
+            dataframe = dataframe.drop(self._schema_config["drop_columns"],axis=1)
             self.split_data_as_train_test(dataframe=dataframe)
             data_ingestion_artifact = DataIngestionArtifact(
                 trainer_file_path=self.data_ingestion_config.training_file_path,

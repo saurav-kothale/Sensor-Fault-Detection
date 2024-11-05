@@ -57,6 +57,7 @@ class SensorData:
                 df = df.drop(columns=["_id"], axis=1)
 
             df.replace({"na": np.nan}, inplace=True)
+            df = df.infer_objects(copy=False)
 
             return df
 
